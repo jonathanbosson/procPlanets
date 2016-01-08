@@ -15,8 +15,8 @@ function (
     "use strict";
 
 
-    var scene, renderer, camera, controls;
-    var terrain, terrainMaterial, terrainUniforms, terrainAttributes, start = Date.now();
+    var scene, renderer, camera, controls, light;
+    var planet, planetGeometry, planetMaterial, planetUniforms, planetAttributes, start = Date.now();
 
 
     init();
@@ -26,45 +26,32 @@ function (
     //initialize scene
     function init()
     {
-        //--------------------------------
-        // SET UP SCENE, CAMERA, RENDERER
-        //--------------------------------
+        // Scene
+        container = document.getElementById( 'container' );
+        scene = new THREE.Scene();
 
-    	//scene
-    	container = document.getElementById( 'container' );
-    	scene = new THREE.Scene();
-
-    	//camera
-        camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
+        // Camera
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
         camera.position.set(0, 100, 200);
-    	camera.lookAt(scene.position);
+        camera.lookAt(scene.position);
         scene.add(camera);
 
-        //Renderer
-    	renderer = new THREE.WebGLRenderer();
+        // Renderer
+        renderer = new THREE.WebGLRenderer();
         renderer.setClearColor( 0xffffff );
         renderer.setPixelRatio( window.devicePixelRatio );
-        renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
+        // Light
+        light = new THREE.PointLight(0xffffff);
+        light.position.set(0,250,0);
+        scene.add(light);
 
-        //--------------------------------
-        // LIGHT
-        //--------------------------------
-    	var light = new THREE.PointLight(0xffffff);
-    	light.position.set(0,250,0);
-    	scene.add(light);
+        // Geometry
+        planetGeometry = new THREE.SphereGeometry(70, 32, 32);
 
-
-
-        //--------------------------------
-        // BOTTOM
-        //--------------------------------
-
-        //geometry
-        var terrainGeometry = new THREE.PlaneBufferGeometry( 200, 200, 100, 100 );
-
-        //shader variables
-        terrainUniforms =
+        // Shader variables
+        planetUniforms =
         {
             time:
             {
@@ -72,47 +59,47 @@ function (
                 value: 0.0  //initialized to 0
             }
         }
-        terrainAttributes =
+        planetAttributes =
         {
             /*
             displacement:
             {
                 type: 'f',  //float
                 value: []   //empty array
-            }*/
+            }
+            */
         }
 
-        //material
-        terrainMaterial = new THREE.ShaderMaterial(
+        // Material
+        planetMaterial = new THREE.MeshBasicMaterial( {color: 0x33FFFF} );
+        /*new THREE.ShaderMaterial(
         {
-            uniforms: terrainUniforms,
-            attributes: terrainAttributes,
+            uniforms: planetUniforms,
+            attributes: planetAttributes,
             vertexShader: noise + vertexShader,
             fragmentShader: noise + fragmentShader
-        } );
+        } );*/
 
-        //create the water and add it to the scene
-        terrain = new THREE.Mesh( terrainGeometry, terrainMaterial );
-        terrain.position.set(0, 0, 0);
-        scene.add( terrain );
-        terrain.rotation.x = - Math.PI/2;
+        // Add planet to the scene
+        planet = new THREE.Mesh(planetGeometry, planetMaterial);
+        planet.position.set(0, 0, 0);
+        scene.add(planet);
+        planet.rotation.x = - Math.PI/2;
 
 
         controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 
-    	container.innerHTML = "";
-        document.body.appendChild( renderer.domElement );
+        container.innerHTML = "";
+        document.body.appendChild(renderer.domElement);
     }
-
 
     function animate()
     {
         requestAnimationFrame( animate );
-        terrainUniforms.time.value +=  0.01;
+        planetUniforms.time.value +=  0.00;
 
-
-    	renderer.render( scene, camera );
+        renderer.render( scene, camera );
         controls.update();
 
     }
