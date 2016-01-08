@@ -1,4 +1,4 @@
-//Isabell Jansson
+//Jonathan Bosson
 
 require([
     "../libs/text!../shaders/vertexShader.glsl",
@@ -10,7 +10,7 @@ require([
 function (
     vertexShader,
     fragmentShader,
-    noise) 
+    noise)
 {
     "use strict";
 
@@ -24,7 +24,7 @@ function (
 
 
     //initialize scene
-    function init() 
+    function init()
     {
         //--------------------------------
         // SET UP SCENE, CAMERA, RENDERER
@@ -62,17 +62,17 @@ function (
 
         //geometry
         var terrainGeometry = new THREE.PlaneBufferGeometry( 200, 200, 100, 100 );
-        
+
         //shader variables
-        terrainUniforms = 
-        {   
-            time: 
+        terrainUniforms =
+        {
+            time:
             {
                 type: "f",  //float
                 value: 0.0  //initialized to 0
             }
         }
-        terrainAttributes = 
+        terrainAttributes =
         {
             /*
             displacement:
@@ -83,7 +83,7 @@ function (
         }
 
         //material
-        terrainMaterial = new THREE.ShaderMaterial( 
+        terrainMaterial = new THREE.ShaderMaterial(
         {
             uniforms: terrainUniforms,
             attributes: terrainAttributes,
@@ -96,23 +96,23 @@ function (
         terrain.position.set(0, 0, 0);
         scene.add( terrain );
         terrain.rotation.x = - Math.PI/2;
-      
+
 
         controls = new THREE.OrbitControls(camera, renderer.domElement);
-      
+
 
     	container.innerHTML = "";
-        document.body.appendChild( renderer.domElement );       
+        document.body.appendChild( renderer.domElement );
     }
 
 
-    function animate() 
+    function animate()
     {
         requestAnimationFrame( animate );
         terrainUniforms.time.value +=  0.01;
-        
-        
-    	renderer.render( scene, camera );		
+
+
+    	renderer.render( scene, camera );
         controls.update();
 
     }
