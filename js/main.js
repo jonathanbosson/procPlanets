@@ -19,6 +19,7 @@ function (
     var planet, planetGeometry, planetMaterial, planetUniforms, planetAttributes, start = Date.now();
 
 
+
     init();
     animate();
 
@@ -48,7 +49,7 @@ function (
         scene.add(light);
 
         // Geometry
-        planetGeometry = new THREE.SphereGeometry(70, 32, 32);
+        planetGeometry = new THREE.SphereGeometry(70, 100, 100);
 
         // Shader variables
         planetUniforms =
@@ -70,15 +71,14 @@ function (
             */
         }
 
-        // Material
-        planetMaterial = new THREE.MeshBasicMaterial( {color: 0x33FFFF} );
-        /*new THREE.ShaderMaterial(
+        // Material new THREE.MeshBasicMaterial( {color: 0x33FFFF} );
+        planetMaterial = new THREE.ShaderMaterial(
         {
             uniforms: planetUniforms,
             attributes: planetAttributes,
             vertexShader: noise + vertexShader,
             fragmentShader: noise + fragmentShader
-        } );*/
+        } );
 
         // Add planet to the scene
         planet = new THREE.Mesh(planetGeometry, planetMaterial);

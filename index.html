@@ -10,7 +10,14 @@
     </head>
     <body>
         <div id="container">Make your own planet</div>
-       
+
+        <script type="text/javascript" src="build/dat.gui.min.js"></script>
+        <script type="text/javascript">
+          var obj = { x: 5 };
+          var gui = new dat.GUI();
+          gui.add(obj, 'x');
+        </script>
+
         <script data-main="js/main" src="libs/require.min.js"></script>
         <script src="libs/stats.min.js"></script>
     </body>
@@ -18,10 +25,7 @@
 
 
 
-<!-- 
-https://www.clicktorelease.com/blog/vertex-displacement-noise-3d-webgl-glsl-three-js 
+<!--
+https://www.clicktorelease.com/blog/vertex-displacement-noise-3d-webgl-glsl-three-js
 GOOD EXAMPLE WITH WEBGL, THREE GLSL!
 -->
-
-
-
