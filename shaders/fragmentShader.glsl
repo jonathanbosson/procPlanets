@@ -4,7 +4,8 @@ varying vec4 vPosition;
 varying vec4 vNormal;
 varying float elevation;
 
-const vec3 lightPos = vec3(0.0, 100.0, 200.0);
+uniform vec3 lightPos;
+
 const vec3 ambientColor = vec3(0.1, 0.1, 0.1);
 const vec3 specColor = vec3(1.0, 1.0, 1.0);
 

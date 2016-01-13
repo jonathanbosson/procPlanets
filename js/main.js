@@ -58,20 +58,27 @@ function (
             {
                 type: "f",  //float
                 value: 0.0  //initialized to 0
+            },
+            heightC:
+            {
+                type: "f",  //float
+                value: 1.0  //initialized to 0
+            },
+            freqC:
+            {
+                type: "f",  //float
+                value: 1.0  //initialized to 0
+            },
+            lightPos:
+            {
+                type: "v3",  //float
+                value: new THREE.Vector3()  //initialized to 0
             }
         }
         planetAttributes =
         {
-            /*
-            displacement:
-            {
-                type: 'f',  //float
-                value: []   //empty array
-            }
-            */
         }
 
-        // Material new THREE.MeshBasicMaterial( {color: 0x33FFFF} );
         planetMaterial = new THREE.ShaderMaterial(
         {
             uniforms: planetUniforms,
@@ -97,7 +104,10 @@ function (
     function animate()
     {
         requestAnimationFrame( animate );
-        planetUniforms.time.value +=  0.00;
+        planetUniforms.time.value +=  0.1;
+        planetUniforms.heightC.value =  1.0;
+        planetUniforms.freqC.value =  1.0;
+        planetUniforms.lightPos.value = camera.position;
 
         renderer.render( scene, camera );
         controls.update();

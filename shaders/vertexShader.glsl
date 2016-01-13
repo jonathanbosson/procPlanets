@@ -1,10 +1,12 @@
 precision mediump float;
 
+uniform float time;
+uniform float heightC;  // change the height of the mountains
+uniform float freqC;  // frequency, change the 'seed' of the mountains
+
 varying vec4 vPosition;
 varying vec4 vNormal;
 varying float elevation;
-
-uniform float time;
 
 void main()
 {
@@ -14,13 +16,13 @@ void main()
     vNormal = modelMatrix * vec4(normal, 1.0);
 
     // Terrain elevation
-    elevation = 0.1 * (snoise(0.01 * vec3(vPosition)));
-    elevation = 1.2 * (snoise(0.02 * vec3(vPosition)));
-    elevation += 0.25 * (snoise(0.04 * vec3(vPosition)));
-    elevation += 0.125 * (snoise(0.08 * vec3(vPosition)));
-    elevation += 0.0625 * (snoise(0.160 * vec3(vPosition)));
-    elevation += 0.03125 * (snoise(0.320 * vec3(vPosition)));
-    elevation += 0.0156 * (snoise(0.640 * vec3(vPosition)));
+    elevation = heightC * 0.1 * (snoise(freqC * 0.01 * vec3(vPosition)));
+    elevation = heightC * 1.2 * (snoise(freqC * 0.02 * vec3(vPosition)));
+    elevation += heightC * 0.25 * (snoise(freqC * 0.04 * vec3(vPosition)));
+    elevation += heightC * 0.125 * (snoise(freqC * 0.08 * vec3(vPosition)));
+    elevation += heightC * 0.0625 * (snoise(freqC * 0.160 * vec3(vPosition)));
+    elevation += heightC * 0.03125 * (snoise(freqC * 0.320 * vec3(vPosition)));
+    elevation += heightC * 0.0156 * (snoise(freqC * 0.640 * vec3(vPosition)));
 
     vPosition = vPosition + vNormal * 0.2 * elevation;
 
