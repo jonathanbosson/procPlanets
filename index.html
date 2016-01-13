@@ -7,16 +7,10 @@
             body {background-color: white;}
         </style>
         <script src='libs/three.min.js'></script>
+        <script src='libs/dat.gui.min.js'></script>
     </head>
     <body>
         <div id="container">Make your own planet</div>
-
-        <script type="text/javascript" src="build/dat.gui.min.js"></script>
-        <script type="text/javascript">
-          var obj = { x: 5 };
-          var gui = new dat.GUI();
-          gui.add(obj, 'x');
-        </script>
 
         <script data-main="js/main" src="libs/require.min.js"></script>
         <script src="libs/stats.min.js"></script>
