@@ -19,8 +19,8 @@ function (
     var planet, planetGeometry, planetMaterial, planetUniforms, planetAttributes, start = Date.now();
 
     var guiControls = new function(){
-      this.heightC = 1.0;
-      this.freqC = 1.0;
+      this.heightC = 0.01;
+      this.freqC = 0.01;
     }
 
     init();
@@ -49,7 +49,7 @@ function (
         // GUI
         var gui = new dat.GUI();
         gui.add(guiControls, 'heightC', 0.0, 2.0);
-        gui.add(guiControls, 'freqC', -3.0, 3.0);
+        gui.add(guiControls, 'freqC', 0.0, 2.5);
 
         // Light
         light = new THREE.PointLight(0xffffff);
@@ -113,8 +113,8 @@ function (
     {
         requestAnimationFrame( animate );
         planetUniforms.time.value +=  0.1;
-        planetUniforms.heightC.value =  guiControls.heightC;
-        planetUniforms.freqC.value =  guiControls.freqC;
+        planetUniforms.heightC.value = guiControls.heightC;
+        planetUniforms.freqC.value = guiControls.freqC;
         planetUniforms.lightPos.value = camera.position;
 
         renderer.render( scene, camera );
