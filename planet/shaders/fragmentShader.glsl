@@ -6,6 +6,11 @@ varying float elevation;
 
 uniform vec3 lightPos;
 
+uniform float WatertoSandLevel;
+uniform float SandtoForestLevel;
+uniform float ForesttoRockLevel;
+uniform float RocktoSnowLevel;
+
 const vec3 ambientColor = vec3(0.1, 0.1, 0.1);
 const vec3 specColor = vec3(1.0, 1.0, 1.0);
 
@@ -39,19 +44,21 @@ void main()
 	// interpolation distance
 	float id = 0.3;
 	// the biome's ranges (in elevation)
-	float deepMin = -1.5;
-	float deepMax = -0.1;
-	float sandMin = -0.1;
-	float sandMax = 0.04;
-	float forestMin = 0.04;
-	float forestMax = 0.27;
-	float snowMin = 0.9;
-	float snowMax = 1.7;
+	float deepMin = -3.0;
+	float deepMax = WatertoSandLevel;
+	float sandMin = WatertoSandLevel;
+	float sandMax = SandtoForestLevel;
+	float forestMin = SandtoForestLevel;
+	float forestMax = ForesttoRockLevel;
+	float rockMin = ForesttoRockLevel;
+	float rockMax = RocktoSnowLevel;
+	float snowMin = RocktoSnowLevel;
+	float snowMax = 3.0;
 
 	// detect where to apply which biome
 	float deep = smoothstep(deepMin - id, deepMin, elevation) - smoothstep(deepMax - id, deepMax, elevation);
 	float sand = smoothstep(sandMin - id, sandMin, elevation) - smoothstep(sandMax - id, sandMax, elevation);
-	float forest = smoothstep(forestMin - id, forestMin, elevation) - smoothstep(forestMax - id, forestMax, elevation);
+	float forest = smoothstep(forestMin - 0.15, forestMin, elevation) - smoothstep(forestMax - 0.15, forestMax, elevation);
 	float snow = smoothstep(snowMin - id, snowMin, elevation) - smoothstep(snowMax - id, snowMax, elevation);
 
 	// apply ALL the colors

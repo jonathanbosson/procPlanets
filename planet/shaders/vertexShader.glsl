@@ -12,7 +12,6 @@ void main()
 {
     float n, waterElev;
     vPosition = modelMatrix * vec4(position, 1.0);
-    vec4 initPos = vec4(position, 1.0);
     vNormal = modelMatrix * vec4(normal, 1.0);
 
     // Terrain elevation
