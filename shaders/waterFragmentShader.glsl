@@ -10,6 +10,7 @@ const vec3 specColor = vec3(1.0, 1.0, 1.0);
 
 void main()
 {
+  // water color
 	vec3 finalColor = vec3(0.1, 0.2, 0.4);
 
 	// Blinn Phong Shading
