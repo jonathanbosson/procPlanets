@@ -25,12 +25,12 @@ function (
 
     // Function called by the sliders
     var guiControls = new function(){
-      this.heightC = 0.01;
-      this.freqC = 0.01;
-      this.WatertoSandLevel = -0.1;
+      this.heightC = 0.99;
+      this.freqC = 0.99;
+      this.WatertoSandLevel = -0.09;
       this.SandtoForestLevel = 0.08;
       this.ForesttoRockLevel = 0.31;
-      this.RocktoSnowLevel = 1.1;
+      this.RocktoSnowLevel = 1.12;
     }
 
     init();
@@ -55,6 +55,7 @@ function (
         renderer.setClearColor( 0xffffff );
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize(window.innerWidth, window.innerHeight);
+        //renderer.context.getExtension('OES_standard_derivatives');
 
         // GUI
         var gui = new dat.GUI();
@@ -187,8 +188,8 @@ function (
         planetUniforms.SandtoForestLevel.value = guiControls.SandtoForestLevel;
         planetUniforms.ForesttoRockLevel.value = guiControls.ForesttoRockLevel;
         planetUniforms.RocktoSnowLevel.value = guiControls.RocktoSnowLevel;
-
         // Send uniforms to the waterPlanet, to make the water level even
+
         waterPlanetUniforms.lightPos.value = camera.position;
         waterPlanetUniforms.heightC.value = guiControls.heightC;
         waterPlanetUniforms.WatertoSandLevel.value = guiControls.WatertoSandLevel;
