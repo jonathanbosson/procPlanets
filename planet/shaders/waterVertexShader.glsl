@@ -12,7 +12,7 @@ void main()
     vPosition = modelMatrix * vec4(position, 1.0);
     vNormal = modelMatrix * vec4(normal, 1.0);
 
-    radius = 0.2*heightC + 2.5*WatertoSandLevel;
+    radius = 0.3 + 0.13*heightC + 0.9*WatertoSandLevel;
     radius = radius*-1.0;
     vPosition = vPosition + vNormal * 0.2 * radius;
 

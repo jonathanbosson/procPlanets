@@ -23,13 +23,14 @@ function (
     var planet, planetGeometry, planetMaterial, planetUniforms, planetAttributes, start = Date.now();
     var waterPlanet, waterPlanetGeometry, waterPlanetMaterial, waterPlanetUniforms, waterPlanetAttributes;
 
+    // Function called by the sliders
     var guiControls = new function(){
-      this.heightC = 0.01;
-      this.freqC = 0.01;
-      this.WatertoSandLevel = -0.1;
+      this.heightC = 0.99;
+      this.freqC = 0.99;
+      this.WatertoSandLevel = -0.09;
       this.SandtoForestLevel = 0.08;
       this.ForesttoRockLevel = 0.31;
-      this.RocktoSnowLevel = 1.1;
+      this.RocktoSnowLevel = 1.12;
     }
 
     init();
@@ -54,25 +55,28 @@ function (
         renderer.setClearColor( 0xffffff );
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize(window.innerWidth, window.innerHeight);
+        //renderer.context.getExtension('OES_standard_derivatives');
 
         // GUI
         var gui = new dat.GUI();
+        // Height and frequency of the mountains
         gui.add(guiControls, 'heightC', 0.0, 2.0);
         gui.add(guiControls, 'freqC', 0.0, 2.5);
 
+        // Biomes sliders
         gui.add(guiControls, 'WatertoSandLevel', -2.0, 0.5);
         gui.add(guiControls, 'SandtoForestLevel', -1.0, 0.9);
         gui.add(guiControls, 'ForesttoRockLevel', -1.0, 0.9);
         gui.add(guiControls, 'RocktoSnowLevel', 0.0, 3.0);
 
-        // Light
+        // Light - nothing atm
         light = new THREE.PointLight(0xffffff);
         light.position.set(0,250,0);
         scene.add(light);
 
         // Geometry
         planetGeometry = new THREE.SphereGeometry(70, 200, 200);
-        waterPlanetGeometry = new THREE.SphereGeometry(50, 32, 32);
+        waterPlanetGeometry = new THREE.SphereGeometry(60, 32, 32);
 
         // Shader variables
         planetUniforms =
@@ -137,6 +141,7 @@ function (
         }
         waterPlanetAttributes = {}
 
+        // Main planet linked to shaders
         planetMaterial = new THREE.ShaderMaterial(
         {
             uniforms: planetUniforms,
@@ -144,7 +149,7 @@ function (
             vertexShader: noise + vertexShader,
             fragmentShader: noise + fragmentShader
         } );
-
+        // the waterPlanet linked to its own shaders
         waterPlanetMaterial = new THREE.ShaderMaterial(
         {
             uniforms: waterPlanetUniforms,
@@ -158,7 +163,7 @@ function (
         planet.position.set(0, 0, 0);
         scene.add(planet);
         planet.rotation.x = - Math.PI/2;
-
+        // Secondary smaller planet to make water levels even
         waterPlanet = new THREE.Mesh(waterPlanetGeometry, waterPlanetMaterial);
         waterPlanet.position.set(0, 0, 0);
         scene.add(waterPlanet);
@@ -183,8 +188,8 @@ function (
         planetUniforms.SandtoForestLevel.value = guiControls.SandtoForestLevel;
         planetUniforms.ForesttoRockLevel.value = guiControls.ForesttoRockLevel;
         planetUniforms.RocktoSnowLevel.value = guiControls.RocktoSnowLevel;
-
         // Send uniforms to the waterPlanet, to make the water level even
+
         waterPlanetUniforms.lightPos.value = camera.position;
         waterPlanetUniforms.heightC.value = guiControls.heightC;
         waterPlanetUniforms.WatertoSandLevel.value = guiControls.WatertoSandLevel;
