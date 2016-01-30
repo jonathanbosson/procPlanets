@@ -45,8 +45,8 @@ void main()
 	float id = 0.3;
 	// the biome's ranges (in elevation)
 	float deepMin = -3.0;
-	float deepMax = WatertoSandLevel;
-	float sandMin = WatertoSandLevel;
+	float deepMax = WatertoSandLevel - 0.1;
+	float sandMin = WatertoSandLevel - 0.1;
 	float sandMax = SandtoForestLevel;
 	float forestMin = SandtoForestLevel;
 	float forestMax = ForesttoRockLevel;

@@ -8,13 +8,18 @@ varying vec4 vNormal;
 
 void main()
 {
-    float radius;
+    float radius, bump;
     vPosition = modelMatrix * vec4(position, 1.0);
     vNormal = modelMatrix * vec4(normal, 1.0);
 
-    radius = 0.3 + 0.13*heightC + 0.9*WatertoSandLevel;
+    // Change waterPlanet's radius to make it follow the parent planet
+    radius = 0.06 + 0.026*heightC + 0.18*WatertoSandLevel;
     radius = radius*-1.0;
-    vPosition = vPosition + vNormal * 0.2 * radius;
+
+    // Add bumps to the water
+    bump = 0.02 * (snoise(100.0 * vec3(vPosition)));
+
+    vPosition = vPosition + vNormal * (radius + bump);
 
     gl_Position = projectionMatrix * viewMatrix * vPosition;
 }

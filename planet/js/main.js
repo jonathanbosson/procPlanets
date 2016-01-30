@@ -20,8 +20,9 @@ function (
 
 
     var scene, renderer, camera, controls, light;
-    var planet, planetGeometry, planetMaterial, planetUniforms, planetAttributes, start = Date.now();
+    var planet, planetGeometry, planetMaterial, planetUniforms, planetAttributes;
     var waterPlanet, waterPlanetGeometry, waterPlanetMaterial, waterPlanetUniforms, waterPlanetAttributes;
+    var lightMaterial, lightAnimation;
 
     // Function called by the sliders
     var guiControls = new function(){
@@ -31,6 +32,7 @@ function (
       this.SandtoForestLevel = 0.08;
       this.ForesttoRockLevel = 0.31;
       this.RocktoSnowLevel = 1.12;
+      this.lightAnimation = false;
     }
 
     init();
@@ -59,6 +61,7 @@ function (
 
         // GUI
         var gui = new dat.GUI();
+
         // Height and frequency of the mountains
         gui.add(guiControls, 'heightC', 0.0, 2.0);
         gui.add(guiControls, 'freqC', 0.0, 2.5);
@@ -69,9 +72,19 @@ function (
         gui.add(guiControls, 'ForesttoRockLevel', -1.0, 0.9);
         gui.add(guiControls, 'RocktoSnowLevel', 0.0, 3.0);
 
+        // Checkbox
+        gui.add( guiControls, 'lightAnimation', false ).onChange( function() {
+          this.lightAnimate = true;
+        } );
+
         // Light - nothing atm
         light = new THREE.PointLight(0xffffff);
-        light.position.set(0,250,0);
+        lightMaterial = new THREE.MeshBasicMaterial( {color: 0xffff40, transparent: true, opacity: 0.5 });
+        light.add( new THREE.Mesh( new THREE.SphereGeometry( 5, 16, 8 ), lightMaterial ) );
+        light.position.set(0, 0, 0);
+
+
+
         scene.add(light);
 
         // Geometry
@@ -162,12 +175,10 @@ function (
         planet = new THREE.Mesh(planetGeometry, planetMaterial);
         planet.position.set(0, 0, 0);
         scene.add(planet);
-        planet.rotation.x = - Math.PI/2;
         // Secondary smaller planet to make water levels even
         waterPlanet = new THREE.Mesh(waterPlanetGeometry, waterPlanetMaterial);
         waterPlanet.position.set(0, 0, 0);
         scene.add(waterPlanet);
-        waterPlanet.rotation.x = - Math.PI/2;
 
         controls = new THREE.OrbitControls(camera, renderer.domElement);
 
@@ -179,23 +190,62 @@ function (
     function animate()
     {
         requestAnimationFrame( animate );
-        planetUniforms.heightC.value = guiControls.heightC;
-        planetUniforms.freqC.value = guiControls.freqC;
-        planetUniforms.lightPos.value = camera.position;
+        sendUniforms();
 
-        // Send environment levels to the fragment shader to decide biomes
-        planetUniforms.WatertoSandLevel.value =  guiControls.WatertoSandLevel;
-        planetUniforms.SandtoForestLevel.value = guiControls.SandtoForestLevel;
-        planetUniforms.ForesttoRockLevel.value = guiControls.ForesttoRockLevel;
-        planetUniforms.RocktoSnowLevel.value = guiControls.RocktoSnowLevel;
-        // Send uniforms to the waterPlanet, to make the water level even
-
-        waterPlanetUniforms.lightPos.value = camera.position;
-        waterPlanetUniforms.heightC.value = guiControls.heightC;
-        waterPlanetUniforms.WatertoSandLevel.value = guiControls.WatertoSandLevel;
+        sendLight();
 
         renderer.render( scene, camera );
         controls.update();
+    }
 
+    function sendLight()
+    {
+      // Control light animation
+      if (guiControls.lightAnimation) {
+        // Set opacity = 1 to see lightsource
+        lightMaterial.opacity = 1.0;
+        // Get time as a changing variable
+        var theta = Date.now() * 0.0005;
+        var phi = Date.now() * 0.0002;
+
+        // Set new light position after Spherical coordinates to define a rotation around the planet
+        light.position.x = 200 * Math.cos(theta) * Math.sin(phi);
+        light.position.y = 200 * Math.sin(theta) * Math.sin(phi);
+        light.position.z = 200 * Math.cos(phi);
+
+        // Send in new position to the shaders
+        planetUniforms.lightPos.value = light.position;
+        waterPlanetUniforms.lightPos.value = light.position;
+
+        //var clock = new THREE.Clock();
+        //var delta = clock.getDelta();
+        //if( planet ) planet.rotation.y -= 0.5 * delta;
+        //planet.rotation.x += 0.02;
+        //planet.rotation.y += 0.0005;
+        //planet.rotation.z += 0.0005;
+      } else {
+        lightMaterial.opacity = 0.0;
+
+        planetUniforms.lightPos.value = camera.position;
+        waterPlanetUniforms.lightPos.value = camera.position;
+
+      }
+    }
+
+    function sendUniforms()
+    {
+      // Send height and frequency variables to the shaders
+      planetUniforms.heightC.value = guiControls.heightC;
+      planetUniforms.freqC.value = guiControls.freqC;
+
+      // Send environment levels to the fragment shader to decide biomes
+      planetUniforms.WatertoSandLevel.value =  guiControls.WatertoSandLevel;
+      planetUniforms.SandtoForestLevel.value = guiControls.SandtoForestLevel;
+      planetUniforms.ForesttoRockLevel.value = guiControls.ForesttoRockLevel;
+      planetUniforms.RocktoSnowLevel.value = guiControls.RocktoSnowLevel;
+
+      // Send uniforms to the waterPlanet, to make the water level even
+      waterPlanetUniforms.heightC.value = guiControls.heightC;
+      waterPlanetUniforms.WatertoSandLevel.value = guiControls.WatertoSandLevel;
     }
 });
