@@ -18,7 +18,7 @@ void main()
   //vec3 dx = dFdx(vec3(vPosition));
   //vec3 dy = dFdy(vec3(vPosition));
 	vec3 newNormal = normalize(vec3(vNormal));
-  normalize(cross(dFdx(vec3(vNormal)), dFdy(vec3(vNormal))));
+  //normalize(cross(dFdx(vec3(vNormal)), dFdy(vec3(vNormal))));
   vec3 lightDir = normalize(lightPos - vec3(vPosition));
 
   float lambertian = max(dot(lightDir, newNormal), 0.0);
