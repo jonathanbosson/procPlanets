@@ -1,5 +1,7 @@
 precision mediump float;
 
+#extension GL_OES_standard_derivatives : enable
+
 varying vec4 vPosition;
 varying vec4 vNormal;
 varying float elevation;
@@ -68,8 +70,7 @@ void main()
 	finalColor = mix(finalColor, waterColor, deep);
 
 	// Blinn Phong Shading
-	vec3 newNormal = normalize(vec3(vNormal));
-	// normalize(cross(dFdx(vec3(vNormal)), dFdy(vec3(vNormal))));
+	vec3 newNormal = normalize(cross(dFdx(vec3(vNormal)), dFdy(vec3(vNormal))));
   vec3 lightDir = normalize(lightPos - vec3(vPosition));
 
   float lambertian = max(dot(lightDir, newNormal), 0.0);

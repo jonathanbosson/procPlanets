@@ -17,7 +17,7 @@ void main()
     radius = radius*-1.0;
 
     // Add bumps to the water
-    bump = 0.02 * (snoise(100.0 * vec3(vPosition)));
+    bump = 0.01 * (snoise(20.0 * vec3(vPosition)));
 
     vPosition = vPosition + vNormal * (radius + bump);
 

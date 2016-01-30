@@ -89,7 +89,7 @@ function (
 
         // Geometry
         planetGeometry = new THREE.SphereGeometry(70, 200, 200);
-        waterPlanetGeometry = new THREE.SphereGeometry(60, 32, 32);
+        waterPlanetGeometry = new THREE.SphereGeometry(60, 200, 200);
 
         // Shader variables
         planetUniforms =
