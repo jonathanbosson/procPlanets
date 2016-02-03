@@ -1,7 +1,8 @@
 precision mediump float;
 
 uniform float WatertoSandLevel;
-uniform float heightC;  // change the height of the mountains
+uniform float heightC;
+uniform float waves;
 
 varying vec4 vPosition;
 varying vec4 vNormal;
@@ -17,7 +18,8 @@ void main()
     radius = radius*-1.0;
 
     // Add bumps to the water
-    bump = 0.01 * (snoise(20.0 * vec3(vPosition)));
+    bump = 0.01 * waves * (snoise((20.0 + 0.02*waves) * vec3(vPosition)));
+    bump += 0.005 * waves * (snoise((20.0 + 0.04*waves) * vec3(vPosition)));
 
     vPosition = vPosition + vNormal * (radius + bump);
 
