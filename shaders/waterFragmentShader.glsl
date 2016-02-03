@@ -8,7 +8,7 @@ varying vec3 pos;
 
 uniform vec3 lightPos;
 
-const vec3 ambientColor = vec3(0.1, 0.1, 0.1);
+const vec3 ambientColor = vec3(0.15, 0.15, 0.15);
 const vec3 specColor = vec3(1.0, 1.0, 1.0);
 
 void main()
@@ -17,8 +17,6 @@ void main()
 	vec3 finalColor = vec3(0.1, 0.2, 0.4);
 
 	// Blinn Phong Shading
-  vec3 dx = dFdx(vec3(vPosition));
-  //vec3 dy = dFdy(vec3(vPosition));
 	vec3 newNormal = normalize(cross(dFdx(vec3(vNormal)), dFdy(vec3(vNormal))));//normalize(vec3(vNormal));
   vec3 lightDir = normalize(lightPos - vec3(vPosition));
 

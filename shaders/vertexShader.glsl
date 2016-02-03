@@ -15,8 +15,8 @@ void main()
     vNormal = modelMatrix * vec4(normal, 1.0);
 
     // Terrain elevation
-    elevation = heightC * 0.1 * (snoise(freqC * 0.01 * vec3(vPosition)));
-    elevation = heightC * 1.2 * (snoise(freqC * 0.02 * vec3(vPosition)));
+    elevation = heightC * 1.0 * (snoise(freqC * 0.01 * vec3(vPosition)));
+    elevation += heightC * 0.5 * (snoise(freqC * 0.02 * vec3(vPosition)));
     elevation += heightC * 0.25 * (snoise(freqC * 0.04 * vec3(vPosition)));
     elevation += heightC * 0.125 * (snoise(freqC * 0.08 * vec3(vPosition)));
     elevation += heightC * 0.0625 * (snoise(freqC * 0.160 * vec3(vPosition)));

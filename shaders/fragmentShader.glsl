@@ -13,7 +13,7 @@ uniform float SandtoForestLevel;
 uniform float ForesttoRockLevel;
 uniform float RocktoSnowLevel;
 
-const vec3 ambientColor = vec3(0.1, 0.1, 0.1);
+const vec3 ambientColor = vec3(0.15, 0.15, 0.15);
 const vec3 specColor = vec3(1.0, 1.0, 1.0);
 
 void main()
@@ -31,7 +31,6 @@ void main()
   rockColor = mix(rockColor, darkRock, clamp(n, 0.0, 1.0));
 
 	// forest color
-	float colorNoise = 0.5 - 0.2 * snoise(vec3(vPosition) * 128.0);
 	forestColor = vec3(0.0, 0.5, 0.0);
 	vec3 forestNoise = 0.5*forestColor;
 	forestNoise -= 0.05 * snoise(16.0 * vec3(vPosition));

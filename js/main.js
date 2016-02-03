@@ -66,7 +66,7 @@ function (
         gui.add(guiControls, 'heightC', 0.0, 2.0);
         gui.add(guiControls, 'freqC', 0.0, 2.5);
 
-        // Biomes sliders
+        // Biome sliders
         gui.add(guiControls, 'WatertoSandLevel', -2.0, 0.5);
         gui.add(guiControls, 'SandtoForestLevel', -1.0, 0.9);
         gui.add(guiControls, 'ForesttoRockLevel', -1.0, 0.9);
@@ -82,9 +82,6 @@ function (
         lightMaterial = new THREE.MeshBasicMaterial( {color: 0xffff40, transparent: true, opacity: 0.5 });
         light.add( new THREE.Mesh( new THREE.SphereGeometry( 5, 16, 8 ), lightMaterial ) );
         light.position.set(0, 0, 0);
-
-
-
         scene.add(light);
 
         // Geometry
@@ -146,10 +143,15 @@ function (
               type: "f",  //float
               value: 0.0  //initialized to 0
           },
+          waves:
+          {
+              type: "f",  //float
+              value: 1.0  //initialized to 0
+          },
           lightPos:
           {
-              type: "v3",  //float
-              value: new THREE.Vector3()  //initialized to 0
+              type: "v3",  // vec3
+              value: new THREE.Vector3()
           }
         }
         waterPlanetAttributes = {}
@@ -191,8 +193,9 @@ function (
     {
         requestAnimationFrame( animate );
         sendUniforms();
-
         sendLight();
+
+
 
         renderer.render( scene, camera );
         controls.update();
@@ -200,30 +203,30 @@ function (
 
     function sendLight()
     {
+      // Get time as a changing variable
+      var theta = Date.now() * 0.0005;
+      var phi = Date.now() * 0.0002;
+      // Animate waves
+      waterPlanetUniforms.waves.value = Math.cos(theta * 2.0);
+
       // Control light animation
       if (guiControls.lightAnimation) {
         // Set opacity = 1 to see lightsource
         lightMaterial.opacity = 1.0;
-        // Get time as a changing variable
-        var theta = Date.now() * 0.0005;
-        var phi = Date.now() * 0.0002;
 
         // Set new light position after Spherical coordinates to define a rotation around the planet
         light.position.x = 200 * Math.cos(theta) * Math.sin(phi);
         light.position.y = 200 * Math.sin(theta) * Math.sin(phi);
         light.position.z = 200 * Math.cos(phi);
 
+
+
         // Send in new position to the shaders
         planetUniforms.lightPos.value = light.position;
         waterPlanetUniforms.lightPos.value = light.position;
 
-        //var clock = new THREE.Clock();
-        //var delta = clock.getDelta();
-        //if( planet ) planet.rotation.y -= 0.5 * delta;
-        //planet.rotation.x += 0.02;
-        //planet.rotation.y += 0.0005;
-        //planet.rotation.z += 0.0005;
       } else {
+        // Set opacity = 0 to make lightsource invisible
         lightMaterial.opacity = 0.0;
 
         planetUniforms.lightPos.value = camera.position;
